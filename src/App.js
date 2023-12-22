@@ -32,7 +32,7 @@ function App() {
   return (
     <div className="App">
       <div style={{display: "flex", justifyContent: "center"}}>
-        <Button onClick={getAuth} href={url}>Login</Button>
+        <Button href={url}>Login</Button>
       </div>
     </div>
   );
