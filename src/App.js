@@ -1,23 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import { Button } from "antd";
+import axios from "axios";
+import "./App.css"
 
+const BASE_URL = "https://api.upstox.com/v2";
+const CLIENT_ID = "9891272d-18cf-4a88-a7c2-af59a5c15d01";
+const REDIRECT_URI = "https://hyperrelay.io";
 function App() {
+  const getAccessCode = () => {
+    axios.get(`${BASE_URL}/login/authorization/dialog?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`)
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Button onClick={getAccessCode}>Login</Button>
     </div>
   );
 }
