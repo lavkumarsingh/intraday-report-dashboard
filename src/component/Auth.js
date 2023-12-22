@@ -27,7 +27,7 @@ function Auth(props) {
       console.log(res.data);
       setToken(res.data.access_token)
       localStorage.setItem("auth", JSON.stringify(res.data));
-      navigate("/dashbaord");
+      navigate("/dashboard");
     })
   }, []);
 
