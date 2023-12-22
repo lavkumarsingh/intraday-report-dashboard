@@ -26,7 +26,7 @@ function Auth(props) {
     }).then(res => {
       console.log(res.data);
       setToken(res.data.access_token)
-      localStorage.setItem("auth", res.data);
+      localStorage.setItem("auth", JSON.stringify(res.data));
       navigate("/dashbaord");
     })
   }, []);
