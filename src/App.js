@@ -28,16 +28,29 @@ function App() {
     })
   }
 
+  const getAuth = async () => {
+    if(code)
+    axios.post(`${BASE_URL}/login/authorization/token?code=${code}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&redirect_uri=${REDIRECT_URI}&grant_type=${"authorization_code"}`, {}, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Api-Version": "2.0"
+      }
+    }).then(res => {
+      console.log(res.data);
+      setToken(res.data.access_token)
+    })
+  }
+
   return (
     <div className="App">
       <div style={{display: "flex", justifyContent: "center"}}>
-        <Button href={url}>Login</Button>
+        <Button onClick={getAuth} href={url}>Login</Button>
         <p>{code}</p>
       </div>
-      <div style={{display: "flex", justifyContent: "center"}}>
+      {/* <div style={{display: "flex", justifyContent: "center"}}>
         <Button onClick={getToken}>Token</Button>
         <p>{token}</p>
-      </div>
+      </div> */}
     </div>
   );
 }
