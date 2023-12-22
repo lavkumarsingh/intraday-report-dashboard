@@ -24,7 +24,7 @@ function App() {
       }
     }).then(res => {
       console.log(res.data);
-      setToken(res.data)
+      setToken(res.data.access_token)
     })
   }
 
