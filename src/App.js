@@ -17,7 +17,7 @@ function App() {
   const [token, setToken] = useState();
 
   const getToken = async () => {
-    axios.post(`${BASE_URL}/login/authorization/token?code=${code}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&redirect_uri=${REDIRECT_URI}&grant_type=${"authorization_code"}`, {
+    axios.post(`${BASE_URL}/login/authorization/token?code=${code}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&redirect_uri=${REDIRECT_URI}&grant_type=${"authorization_code"}`, {}, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "Api-Version": "2.0"
