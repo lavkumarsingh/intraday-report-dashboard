@@ -2,7 +2,7 @@ import { Button } from "antd";
 import Auth from "./component/Auth";
 
 function App() {
-    console.log(localStorage.getItem("auth").access_token);
+    console.log(localStorage.getItem("auth"));
     const action = <Button style={{backgroundColor: "black", padding: 0, height: "50px", width: "200px"}}>
         <img src="upstox-logo.jpeg" style={{width: "200px", height: "100%", borderRadius: 4}}/>
     </Button>
