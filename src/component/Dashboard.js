@@ -1,7 +1,7 @@
 function Dashboard() {
     return ( 
         <>
-        {localStorage.get('auth').access_token}
+        {JSON.parse(localStorage.getItem('auth'))?.access_token}
         </>
      );
 }
