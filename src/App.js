@@ -1,15 +1,36 @@
 import { Button } from "antd";
 import axios from "axios";
+import { useSearchParams } from 'react-router-dom'
 import "./App.css"
 
 const BASE_URL = "https://api.upstox.com/v2";
 const CLIENT_ID = "9891272d-18cf-4a88-a7c2-af59a5c15d01";
+const CLIENT_SECRET = "x87gssludi";
 const REDIRECT_URI = "https://upstox-report.vercel.app/";
+
 function App() {
-  const url = `${BASE_URL}/login/authorization/dialog?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const url = `${BASE_URL}/login/authorization/dialog?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${"code"}`;
+  
+  const [searchParams, setSearchParams] = useSearchParams();
+  const code = searchParams.get("code");
+  console.log(code);
+
+  const getToken = async () => {
+    axios.get(`${BASE_URL}/login/authorization/token?code=${code}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&redirect_uri=${REDIRECT_URI}&grant_type=${"authorization_code"}`).then(res => {
+      console.log(res.data);
+    })
+  }
+
   return (
     <div className="App">
-      <Button href={url}>Login</Button>
+      <div style={{display: "flex"}}>
+        <Button href={url}>Login</Button>
+        <p>{code}</p>
+      </div>
+      <div style={{display: "flex"}}>
+        <Button href={url}>Token</Button>
+        <p>{token}</p>
+      </div>
     </div>
   );
 }
