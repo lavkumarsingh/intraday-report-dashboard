@@ -30,7 +30,7 @@ function App() {
         <p>{code}</p>
       </div>
       <div style={{display: "flex", justifyContent: "center"}}>
-        <Button href={url}>Token</Button>
+        <Button onClick={getToken}>Token</Button>
         <p>{token}</p>
       </div>
     </div>
