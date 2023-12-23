@@ -1,13 +1,21 @@
+import axios from "axios";
 
-export const getTradeDetails = async () => {
-    await axios.get(`${BASE_URL}/trade/profit-loss/data?from_date=${from_date}&to_date=${to_date}&segment=${segment}&financial_year=${financial_year}&page_number=${page_number}&page_size=${page_size}`, {
-        headers: {
-            "Api-Version": "2.0",
-            "Authorization": `Bearer ${JSON.parse(localStorage.getItem('auth')).access_token}`,
-            "Accept": "application/json"
-        }
-    }).then(res => {
-        const data = res.data.data;
+// .env constants
+const BASE_URL = "https://api.upstox.com/v2"
+const REDIRECT_URI = "https://upstox-report.vercel.app/"
+const CLIENT_ID = "9891272d-18cf-4a88-a7c2-af59a5c15d01"
+const CLIENT_SECRET = "x87gssludi"
+
+export const getTradeDetails = async (from_date, to_date, segment, financial_year, page_number, page_size) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/trade/profit-loss/data?from_date=${from_date}&to_date=${to_date}&segment=${segment}&financial_year=${financial_year}&page_number=${page_number}&page_size=${page_size}`, {
+            headers: {
+                "Api-Version": "2.0",
+                "Authorization": `Bearer ${JSON.parse(localStorage.getItem('auth')).access_token}`,
+                "Accept": "application/json"
+            }
+        });
+        const data = response.data.data || [];
         data.sort((a, b) => {
             function convertDate(dateString){
                 var p = dateString.split(/\D/g)
@@ -20,11 +28,33 @@ export const getTradeDetails = async () => {
             data,
             msg: "Successfully fetched intraday data."
         }
-    }).catch(err => {
+    } catch (err) {
         return {
-            err: err.response.data,
-            msg: "Error occured."
+            err: err.response,
+            msg: "Successfully fetched intraday data."
         }
-    });
+    }   
 }
+//https://api.upstox.com/v2/portfolio/long-term-holdings
 
+export const getPortfolioDetails = async () => {
+    try {
+        const response = await axios.get(`${BASE_URL}/portfolio/long-term-holdings`, {
+            headers: {
+                "Api-Version": "2.0",
+                "Authorization": `Bearer ${JSON.parse(localStorage.getItem('auth')).access_token}`,
+                "Accept": "application/json"
+            }
+        })
+        const data = response.data.data;
+        return {
+            data,
+            msg: "Successfully fetched intraday data."
+        }
+    } catch (err) {
+        return {
+            err: err.response,
+            msg: "Successfully fetched intraday data."
+        }
+    }
+}
