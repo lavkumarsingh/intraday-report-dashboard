@@ -87,7 +87,6 @@ function Dashboard() {
                             <Card style={{width: "100%", marginBottom: 10}}>
                                 <Descriptions layout="horizontal" bordered>
                                     <Descriptions.Item label="Stock">{portfolio.tradingsymbol}</Descriptions.Item>
-                                    <Descriptions.Item label="Buy Date">{portfolio.buy_date}</Descriptions.Item>
                                     <Descriptions.Item label="Quantity">{portfolio.quantity}</Descriptions.Item>
                                     <Descriptions.Item label="Avg. Buy Price">{portfolio.average_price}</Descriptions.Item>
                                     <Descriptions.Item label="P&L"><p style={{color: portfolio.pnl > 0 ? "green" : "red"}}>{parseFloat(portfolio.pnl).toFixed(2)} {portfolio.pnl > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />} </p></Descriptions.Item>
