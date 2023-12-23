@@ -17,14 +17,15 @@ const page_size = 100;
 
 function Dashboard() {
     const navigate = useNavigate();
-    const [trades, setTrades] = useState([]);
+    const [intradayTrades, setIntradayTrades] = useState([]);
+    const [deliveryTrades, setDeliveryTrades] = useState([]);
     const [portfolios, setPortfolios] = useState([]);
     
     useEffect(() => {
         getTradeDetails(from_date, to_date, segment, financial_year, page_number, page_size).then(res => {
-            console.log(res)
             if(res.data)
-                setTrades(res.data)
+            setIntradayTrades(res.data.intraday);
+            setDeliveryTrades(res.data.delivery);
             if(res.status == 401)
             navigate("/");
         })
@@ -39,9 +40,29 @@ function Dashboard() {
     return ( 
         <div className="" style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "#f5f5f5", padding: 10}}>
             <div className="" style={{width: "100%"}}>
-                <h3>Trades</h3>
+                <h3>Intraday trades</h3>
                 {
-                    trades?.map((trade, i) => {
+                    intradayTrades?.map((trade, i) => {
+                        return <div key={i}>
+                            <Card style={{width: "100%", marginBottom: 10}}>
+                                <Descriptions layout="horizontal" bordered>
+                                    <Descriptions.Item label="Stock">{trade.scrip_name}</Descriptions.Item>
+                                    <Descriptions.Item label="Buy Date">{trade.buy_date}</Descriptions.Item>
+                                    <Descriptions.Item label="Sell Date">{trade.sell_date}</Descriptions.Item>
+                                    <Descriptions.Item label="Quantity">{trade.quantity}</Descriptions.Item>
+                                    <Descriptions.Item label="Avg. Buy Price">{trade.buy_average}</Descriptions.Item>
+                                    <Descriptions.Item label="Avg. Sell Price">{trade.sell_average}</Descriptions.Item>
+                                    <Descriptions.Item label="P&L"><p style={{ color: trade.sell_amount - trade.buy_amount > 0 ? "green" : "red"}}>{parseFloat(trade.sell_amount - trade.buy_amount).toFixed(2)} {trade.sell_amount - trade.buy_amount > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />} </p></Descriptions.Item>
+                                </Descriptions>
+                            </Card>
+                        </div>
+                    })
+                }
+            </div>
+            <div className="" style={{width: "100%"}}>
+                <h3>Dilevery trades</h3>
+                {
+                    deliveryTrades?.map((trade, i) => {
                         return <div key={i}>
                             <Card style={{width: "100%", marginBottom: 10}}>
                                 <Descriptions layout="horizontal" bordered>
@@ -59,7 +80,7 @@ function Dashboard() {
                 }
             </div>
             <div className="" style={{ width: "100%"}}>
-                <h3>Portfolio</h3>
+                <h3>Holdings</h3>
                 {
                     portfolios?.map((portfolio, i) => {
                         return <div key={i}>
@@ -76,8 +97,6 @@ function Dashboard() {
                     })
                 }
             </div>
-
-            
         </div>
      );
 }

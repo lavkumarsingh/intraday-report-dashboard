@@ -24,8 +24,28 @@ export const getTradeDetails = async (from_date, to_date, segment, financial_yea
             return new Date(convertDate(b.buy_date)) - new Date(convertDate(a.buy_date)); // asending via date
         })
 
+        let delivery = [];
+        let intraday = [];
+        for(let i=0; i<data.length; i++) {
+            if(data[i].buy_date !== data[i].sell_date) {
+                console.log(data[i].scrip_name);
+                const e = data.splice(i, 1);
+                delivery.push(e[0]);
+                i--;
+            }
+        }
+        intraday = data;
+        console.log({
+            data: {
+                delivery,
+                intraday
+            }
+        })
         return {
-            data,
+            data: {
+                delivery,
+                intraday
+            },
             msg: "Successfully fetched intraday data."
         }
     } catch (err) {
