@@ -35,7 +35,6 @@ export const getTradeDetails = async (from_date, to_date, segment, financial_yea
         }
     }   
 }
-//https://api.upstox.com/v2/portfolio/long-term-holdings
 
 export const getPortfolioDetails = async () => {
     try {

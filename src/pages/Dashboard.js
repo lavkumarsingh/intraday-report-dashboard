@@ -19,46 +19,16 @@ function Dashboard() {
     const navigate = useNavigate();
     const [trades, setTrades] = useState([]);
     const [portfolios, setPortfolios] = useState([]);
-
-    // const profitLossHistory = () => {
-    //     axios.get(`${BASE_URL}/trade/profit-loss/data?from_date=${from_date}&to_date=${to_date}&segment=${segment}&financial_year=${financial_year}&page_number=${page_number}&page_size=${page_size}`, {
-    //         headers: {
-    //             "Api-Version": "2.0",
-    //             "Authorization": `Bearer ${JSON.parse(localStorage.getItem('auth')).access_token}`,
-    //             "Accept": "application/json"
-    //         }
-    //     }).then(res => {
-    //         const data = res.data.data;
-    //         data.sort((a, b) => {
-    //             function convertDate(dateString){
-    //                 var p = dateString.split(/\D/g)
-    //                 return [p[2],p[1],p[0] ].join("-")
-    //               }
-    //             return new Date(convertDate(b.buy_date)) - new Date(convertDate(a.buy_date)); // asending via date
-    //         })
-    //         setTrades(data);
-    //     });
-    // }
-    useEffect(() => {
-        // profitLossHistory();
-        // getTradeDetails(from_date, to_date, segment, financial_year, page_number, page_size).then(trades => {
-        //     console.log(trades)
-        //     setTrades(trades?.data);
-        // })
-        // getPortfolioDetails().then(portfolio => {
-        //     setPortfolios(portfolio?.data);
-        // })
-    }, []);
     
     useEffect(() => {
-        const trade = getTradeDetails(from_date, to_date, segment, financial_year, page_number, page_size).then(res => {
+        getTradeDetails(from_date, to_date, segment, financial_year, page_number, page_size).then(res => {
             console.log(res)
             if(res.data)
                 setTrades(res.data)
             if(res.status == 401)
             navigate("/");
         })
-        const portfolio = getPortfolioDetails().then(res => {
+        getPortfolioDetails().then(res => {
             if(res.data)
             setPortfolios(res.data)
             if(res.status == 401)
