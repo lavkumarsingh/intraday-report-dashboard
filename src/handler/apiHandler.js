@@ -1,5 +1,5 @@
+import { message } from "antd";
 import axios from "axios";
-
 // .env constants
 const BASE_URL = "https://api.upstox.com/v2"
 const REDIRECT_URI = "https://upstox-report.vercel.app/"
@@ -30,8 +30,8 @@ export const getTradeDetails = async (from_date, to_date, segment, financial_yea
         }
     } catch (err) {
         return {
-            err: err.response,
-            msg: "Successfully fetched intraday data."
+            status: err.response.status,
+            msg: "Error occured"
         }
     }   
 }
@@ -53,8 +53,8 @@ export const getPortfolioDetails = async () => {
         }
     } catch (err) {
         return {
-            err: err.response,
-            msg: "Successfully fetched intraday data."
+            status: err.response.status,
+            msg: "Error occured"
         }
     }
 }

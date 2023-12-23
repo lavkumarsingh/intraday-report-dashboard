@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Card, Descriptions } from "antd";
+import { Card, Descriptions, message } from "antd";
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import Typography from "antd/es/typography/Typography";
 import { getPortfolioDetails, getTradeDetails } from "../handler/apiHandler";
+import Typography from "antd/es/typography/Typography";
+import { useNavigate } from "react-router";
 const { Text } = Typography;
 
 const BASE_URL = "https://api.upstox.com/v2";
@@ -15,6 +16,7 @@ const page_number = 1;
 const page_size = 100;
 
 function Dashboard() {
+    const navigate = useNavigate();
     const [trades, setTrades] = useState([]);
     const [portfolios, setPortfolios] = useState([]);
 
@@ -49,13 +51,24 @@ function Dashboard() {
     }, []);
     
     useEffect(() => {
-        const trade = getTradeDetails(from_date, to_date, segment, financial_year, page_number, page_size).then(res => setTrades(res.data))
-        const portfolio = getPortfolioDetails().then(res => setPortfolios(res.data))
+        const trade = getTradeDetails(from_date, to_date, segment, financial_year, page_number, page_size).then(res => {
+            console.log(res)
+            if(res.data)
+                setTrades(res.data)
+            if(res.status == 401)
+            navigate("/");
+        })
+        const portfolio = getPortfolioDetails().then(res => {
+            if(res.data)
+            setPortfolios(res.data)
+            if(res.status == 401)
+            navigate("/");
+        })
     }, []);
 
     return ( 
-        <div className="" style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "#f5f5f5"}}>
-            <div className="" style={{width: "80%"}}>
+        <div className="" style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "#f5f5f5", padding: 10}}>
+            <div className="" style={{width: "100%"}}>
                 <h3>Trades</h3>
                 {
                     trades?.map((trade, i) => {
@@ -75,7 +88,7 @@ function Dashboard() {
                     })
                 }
             </div>
-            <div className="" style={{ width: "80%"}}>
+            <div className="" style={{ width: "100%"}}>
                 <h3>Portfolio</h3>
                 {
                     portfolios?.map((portfolio, i) => {
