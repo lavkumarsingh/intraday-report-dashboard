@@ -1,101 +1,28 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Card, Descriptions, message } from "antd";
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import { getPortfolioDetails, getTradeDetails } from "../utils/apiHandler";
+import { getChargesDetails, getPortfolioDetails, getTradeDetails } from "../utils/apiHandler";
 import Typography from "antd/es/typography/Typography";
 import { useNavigate } from "react-router";
 const { Text } = Typography;
 
-const BASE_URL = "https://api.upstox.com/v2";
-
-const from_date = "01-12-2023";
-const to_date = "20-12-2023";
-const segment = "EQ";
-const financial_year = "2324";
-const page_number = 1;
-const page_size = 100;
-
 function Dashboard() {
     const navigate = useNavigate();
-    const [intradayTrades, setIntradayTrades] = useState([]);
-    const [deliveryTrades, setDeliveryTrades] = useState([]);
-    const [portfolios, setPortfolios] = useState([]);
+    const [charges, setCharges] = useState({});
     
     useEffect(() => {
-        getTradeDetails(from_date, to_date, segment, financial_year, page_number, page_size).then(res => {
+        getChargesDetails().then(res => {
+            if(res.status)
+                navigate("/");
             if(res.data)
-            setIntradayTrades(res.data.intraday);
-            setDeliveryTrades(res.data.delivery);
-            if(res.status == 401)
-            navigate("/");
-        })
-        getPortfolioDetails().then(res => {
-            if(res.data)
-            setPortfolios(res.data)
-            if(res.status == 401)
-            navigate("/");
+                setCharges(res.data.charges_breakdown)
+            console.log(res.data.charges_breakdown)
         })
     }, []);
 
     return ( 
         <div className="" style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "#f5f5f5", padding: 10}}>
-            <div className="" style={{width: "100%"}}>
-                <h3>Intraday trades</h3>
-                {
-                    intradayTrades?.map((trade, i) => {
-                        return <div key={i}>
-                            <Card style={{width: "100%", marginBottom: 10}}>
-                                <Descriptions layout="horizontal" bordered>
-                                    <Descriptions.Item label="Stock">{trade.scrip_name}</Descriptions.Item>
-                                    <Descriptions.Item label="Buy Date">{trade.buy_date}</Descriptions.Item>
-                                    <Descriptions.Item label="Sell Date">{trade.sell_date}</Descriptions.Item>
-                                    <Descriptions.Item label="Quantity">{trade.quantity}</Descriptions.Item>
-                                    <Descriptions.Item label="Avg. Buy Price">{trade.buy_average}</Descriptions.Item>
-                                    <Descriptions.Item label="Avg. Sell Price">{trade.sell_average}</Descriptions.Item>
-                                    <Descriptions.Item label="P&L"><p style={{ color: trade.sell_amount - trade.buy_amount > 0 ? "green" : "red"}}>{parseFloat(trade.sell_amount - trade.buy_amount).toFixed(2)} {trade.sell_amount - trade.buy_amount > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />} </p></Descriptions.Item>
-                                </Descriptions>
-                            </Card>
-                        </div>
-                    })
-                }
-            </div>
-            <div className="" style={{width: "100%"}}>
-                <h3>Dilevery trades</h3>
-                {
-                    deliveryTrades?.map((trade, i) => {
-                        return <div key={i}>
-                            <Card style={{width: "100%", marginBottom: 10}}>
-                                <Descriptions layout="horizontal" bordered>
-                                    <Descriptions.Item label="Stock">{trade.scrip_name}</Descriptions.Item>
-                                    <Descriptions.Item label="Buy Date">{trade.buy_date}</Descriptions.Item>
-                                    <Descriptions.Item label="Sell Date">{trade.sell_date}</Descriptions.Item>
-                                    <Descriptions.Item label="Quantity">{trade.quantity}</Descriptions.Item>
-                                    <Descriptions.Item label="Avg. Buy Price">{trade.buy_average}</Descriptions.Item>
-                                    <Descriptions.Item label="Avg. Sell Price">{trade.sell_average}</Descriptions.Item>
-                                    <Descriptions.Item label="P&L"><p style={{ color: trade.sell_amount - trade.buy_amount > 0 ? "green" : "red"}}>{parseFloat(trade.sell_amount - trade.buy_amount).toFixed(2)} {trade.sell_amount - trade.buy_amount > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />} </p></Descriptions.Item>
-                                </Descriptions>
-                            </Card>
-                        </div>
-                    })
-                }
-            </div>
-            <div className="" style={{ width: "100%"}}>
-                <h3>Holdings</h3>
-                {
-                    portfolios?.map((portfolio, i) => {
-                        return <div key={i}>
-                            <Card style={{width: "100%", marginBottom: 10}}>
-                                <Descriptions layout="horizontal" bordered>
-                                    <Descriptions.Item label="Stock">{portfolio.tradingsymbol}</Descriptions.Item>
-                                    <Descriptions.Item label="Quantity">{portfolio.quantity}</Descriptions.Item>
-                                    <Descriptions.Item label="Avg. Buy Price">{portfolio.average_price}</Descriptions.Item>
-                                    <Descriptions.Item label="P&L"><p style={{color: portfolio.pnl > 0 ? "green" : "red"}}>{parseFloat(portfolio.pnl).toFixed(2)} {portfolio.pnl > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />} </p></Descriptions.Item>
-                                </Descriptions>
-                            </Card>
-                        </div>
-                    })
-                }
-            </div>
+            <p>Total charges: {charges.total}</p>
         </div>
      );
 }

@@ -19,15 +19,25 @@ function Intraday() {
     const navigate = useNavigate();
     const [intradayTrades, setIntradayTrades] = useState([]);
     const [deliveryTrades, setDeliveryTrades] = useState([]);
+    const [pnl, setPnl] = useState([]);
     
     useEffect(() => {
         getTradeDetails(from_date, to_date, segment, financial_year, page_number, page_size).then(res => {
-            if(res.data)
-            setIntradayTrades(res.data.intraday);
-            setDeliveryTrades(res.data.delivery);
             if(res.status == 401)
-            navigate("/");
+                navigate("/");
+            if(res.data) {
+                setIntradayTrades(res.data.intraday);
+                setDeliveryTrades(res.data.delivery);
+                
+                let pnlTotal = 0;
+                res.data.intraday.map(trade => {
+                    pnlTotal += (trade.sell_amount - trade.buy_amount)
+                })
+                setPnl(parseFloat(pnlTotal).toFixed(2))
+            }
         })
+
+        console.log(pnl)
     }, []);
 
     return ( 
@@ -35,6 +45,7 @@ function Intraday() {
             
             <div style={{width: "100%"}}>
                 <h3>Intraday trades</h3>
+                <p>P&L: {pnl}</p>
                 {
                     intradayTrades?.map((trade, i) => {
                         return <div key={i}>

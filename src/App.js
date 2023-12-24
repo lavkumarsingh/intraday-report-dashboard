@@ -12,10 +12,10 @@ function App() {
             {/* <Route path="/" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} /> */}
             <Route path="/" element={<Login />} />
-            <Route path="" element={<ProtectedRoute auth={JSON.parse(localStorage.getItem("auth")).access_token} outlet={<Layout/>}/>}>
-                <Route path="/dashboard" element={<ProtectedRoute auth={JSON.parse(localStorage.getItem("auth")).access_token} outlet={<Dashboard />}/>}/>
-                <Route path="/trades" element={<ProtectedRoute auth={JSON.parse(localStorage.getItem("auth")).access_token} outlet={<Trades />}/>}/>
-                <Route path="/holdings" element={<ProtectedRoute auth={JSON.parse(localStorage.getItem("auth")).access_token} outlet={<Holding />}/>}/>
+            <Route path="" element={<ProtectedRoute auth={JSON.parse(localStorage.getItem("auth"))?.access_token} outlet={<Layout/>}/>}>
+                <Route path="/dashboard" element={<ProtectedRoute auth={JSON.parse(localStorage.getItem("auth"))?.access_token} outlet={<Dashboard />}/>}/>
+                <Route path="/trades" element={<ProtectedRoute auth={JSON.parse(localStorage.getItem("auth"))?.access_token} outlet={<Trades />}/>}/>
+                <Route path="/holdings" element={<ProtectedRoute auth={JSON.parse(localStorage.getItem("auth"))?.access_token} outlet={<Holding />}/>}/>
             </Route>
         </Routes>
     )

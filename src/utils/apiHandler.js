@@ -77,3 +77,25 @@ export const getPortfolioDetails = async () => {
         }
     }
 }
+
+export const getChargesDetails = async () => {
+    try {
+        const response = await axios.get(`${BASE_URL}/trade/profit-loss/charges?from_date=15-12-2023&to_date=20-12-2023&segment=EQ&financial_year=2324`, {
+            headers: {
+                "Api-Version": "2.0",
+                "Authorization": `Bearer ${JSON.parse(localStorage.getItem('auth')).access_token}`,
+                "Accept": "application/json"
+            }
+        })
+        const data = response.data.data;
+        return {
+            data,
+            msg: "Successfully fetched intraday data."
+        }
+    } catch (err) {
+        return {
+            status: err.response.status,
+            msg: "Error occured"
+        }
+    }
+}
