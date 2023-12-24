@@ -15,11 +15,10 @@ const financial_year = "2324";
 const page_number = 1;
 const page_size = 100;
 
-function Dashboard() {
+function Intraday() {
     const navigate = useNavigate();
     const [intradayTrades, setIntradayTrades] = useState([]);
     const [deliveryTrades, setDeliveryTrades] = useState([]);
-    const [portfolios, setPortfolios] = useState([]);
     
     useEffect(() => {
         getTradeDetails(from_date, to_date, segment, financial_year, page_number, page_size).then(res => {
@@ -29,17 +28,12 @@ function Dashboard() {
             if(res.status == 401)
             navigate("/");
         })
-        getPortfolioDetails().then(res => {
-            if(res.data)
-            setPortfolios(res.data)
-            if(res.status == 401)
-            navigate("/");
-        })
     }, []);
 
     return ( 
-        <div className="" style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "#f5f5f5", padding: 10}}>
-            <div className="" style={{width: "100%"}}>
+        <div style={{ padding: 10 }}>
+            
+            <div style={{width: "100%"}}>
                 <h3>Intraday trades</h3>
                 {
                     intradayTrades?.map((trade, i) => {
@@ -58,8 +52,9 @@ function Dashboard() {
                         </div>
                     })
                 }
-            </div>
-            <div className="" style={{width: "100%"}}>
+                </div>
+                
+                <div style={{width: "100%"}}>
                 <h3>Dilevery trades</h3>
                 {
                     deliveryTrades?.map((trade, i) => {
@@ -79,25 +74,8 @@ function Dashboard() {
                     })
                 }
             </div>
-            <div className="" style={{ width: "100%"}}>
-                <h3>Holdings</h3>
-                {
-                    portfolios?.map((portfolio, i) => {
-                        return <div key={i}>
-                            <Card style={{width: "100%", marginBottom: 10}}>
-                                <Descriptions layout="horizontal" bordered>
-                                    <Descriptions.Item label="Stock">{portfolio.tradingsymbol}</Descriptions.Item>
-                                    <Descriptions.Item label="Quantity">{portfolio.quantity}</Descriptions.Item>
-                                    <Descriptions.Item label="Avg. Buy Price">{portfolio.average_price}</Descriptions.Item>
-                                    <Descriptions.Item label="P&L"><p style={{color: portfolio.pnl > 0 ? "green" : "red"}}>{parseFloat(portfolio.pnl).toFixed(2)} {portfolio.pnl > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />} </p></Descriptions.Item>
-                                </Descriptions>
-                            </Card>
-                        </div>
-                    })
-                }
-            </div>
         </div>
      );
 }
 
-export default Dashboard;
+export default Intraday;
